@@ -1,0 +1,15 @@
+# 忽略 Java build
+/target/
+*.class
+
+# 忽略 node_modules
+/react-frontend/node_modules/
+
+# 忽略 IDE 設定
+*.iml
+.idea/
+*.log
+
+# 忽略 OS 系統檔
+.DS_Store
+Thumbs.db
