@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 import './UserCreateForm.css';
 
 export default function UserCreateForm() {
@@ -19,7 +20,13 @@ export default function UserCreateForm() {
     e.preventDefault();
 
     if (!form.username || !form.password) {
-      alert('❌ 帳號與密碼不得為空');
+      Swal.fire({
+        icon: "error",
+        title: "❌ 帳號與密碼不得為空",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500  
+      });
       return;
     }
 
@@ -32,14 +39,32 @@ export default function UserCreateForm() {
       });
 
       if (res.ok) {
-        alert('✅ 使用者新增成功');
+        Swal.fire({
+          icon: "success",
+          title: "✅ 使用者新增成功",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500  
+        });
         setForm({ username: '', password: '', role: 'USER' });
       } else {
         const err = await res.text();
-        alert(`❌ 新增失敗：${err}`);
+        Swal.fire({
+          icon: "error",
+          title: `❌ 新增失敗：${err}`,
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500  
+        });
       }
     } catch (err) {
-      alert('⚠️ 系統錯誤，請稍後再試');
+      Swal.fire({
+        icon: "warning",
+        title: "⚠️ 系統錯誤，請稍後再試",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500  
+      });
       console.error(err);
     } finally {
       setLoading(false);

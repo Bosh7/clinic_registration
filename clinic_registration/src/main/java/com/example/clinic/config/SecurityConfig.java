@@ -33,6 +33,7 @@ public class SecurityConfig {
                         "/robots.txt",
                         "/css/**",
                         "/js/**")
+                
                 .permitAll()
                 .anyRequest().authenticated()
             )

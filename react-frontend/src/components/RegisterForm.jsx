@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Swal from 'sweetalert2'; 
 import './RegisterForm.css'; 
 
 function RegisterForm({ selectedDepartment, onBack }) {
@@ -37,10 +38,8 @@ function RegisterForm({ selectedDepartment, onBack }) {
     }
   }, [selectedDepartment, selectedDate]);
 
-  /* 依照使用者點選的醫師/時段/日期查詢當前已掛號人數 */
   useEffect(() => {
     if (selectedSlot && selectedDate) {
-      // 取得醫師ID
       getDoctorIdByName(selectedSlot.doctor)
         .then((doctorId) => {
           return fetch(
@@ -66,29 +65,52 @@ function RegisterForm({ selectedDepartment, onBack }) {
     const res = await fetch(`http://localhost:8080/api/doctors/find-id?name=${encodeURIComponent(doctorName)}`);
     if (!res.ok) throw new Error('找不到醫師 ID');
     const obj = await res.json();
-  
-    return obj.id || (obj.data && obj.data.id) || obj; // 根據實際API回傳格式調整
+    return obj.id || (obj.data && obj.data.id) || obj;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!idValue || !selectedSlot || !selectedDate) {
-      alert('請完整選擇掛號資訊與輸入識別資料');
+      Swal.fire({
+        icon: "error",
+        title: "❌ 請完整選擇掛號資訊與輸入識別資料",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
       return;
     }
     if (idType === '身分證號') {
       const idRegex = /^[A-Z][0-9]{9}$/;
       if (!idRegex.test(idValue)) {
-        alert('身分證號格式錯誤，請輸入正確格式（例如：A123456789）');
+        Swal.fire({
+          icon: "error",
+          title: "❌ 身分證號格式錯誤，請輸入正確格式（例如：A123456789）",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500
+        });
         return;
       }
     }
     if (idType === '病歷號' && idValue.length !== 10) {
-      alert('病歷號需為 10 碼，請重新輸入');
+      Swal.fire({
+        icon: "error",
+        title: "❌ 病歷號需為 10 碼，請重新輸入",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
       return;
     }
     if (registrationCount >= registrationLimit) {
-      alert('本時段人數已滿，無法掛號！');
+      Swal.fire({
+        icon: "error",
+        title: "❌ 本時段人數已滿，無法掛號！",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
       return;
     }
 
@@ -114,7 +136,13 @@ function RegisterForm({ selectedDepartment, onBack }) {
 
       setSubmitted(true);
     } catch (error) {
-      alert('錯誤：' + error.message);
+      Swal.fire({
+        icon: "error",
+        title: "❌ 錯誤：" + error.message,
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 
@@ -143,7 +171,7 @@ function RegisterForm({ selectedDepartment, onBack }) {
           max={maxDateStr}
           onChange={(e) => {
             setSelectedDate(e.target.value);
-            setSelectedSlot(null); // 日期切換時清除選擇，避免跨日誤選
+            setSelectedSlot(null);
           }}
         />
       </div>
@@ -187,7 +215,6 @@ function RegisterForm({ selectedDepartment, onBack }) {
         </table>
       </div>
 
-      {/* 選好時段時顯示人數統計 */}
       {selectedSlot && (
         <div className="register-form-selected-info">
           您選擇了：{selectedSlot.day} {selectedSlot.period} - {selectedSlot.doctor}
@@ -229,7 +256,6 @@ function RegisterForm({ selectedDepartment, onBack }) {
           />
         </div>
 
-        {/*  掛號確認按鈕禁止超過人數  */}
         <button
           type="submit"
           className="register-form-button"

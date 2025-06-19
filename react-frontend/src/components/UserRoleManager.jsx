@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import './UserRoleManager.css';
 
 export default function UserRoleManager() {
@@ -11,7 +12,13 @@ export default function UserRoleManager() {
       const data = await res.json();
       setUsers(data);
     } catch (err) {
-      alert('❌ 無法載入使用者資料');
+      Swal.fire({
+        icon: "error",
+        title: "❌ 無法載入使用者資料",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500  
+      });
       console.error(err);
     }
   };
@@ -25,8 +32,17 @@ export default function UserRoleManager() {
     if (username === 'admin') return;
 
     const newRole = currentRole === 'ADMIN' ? 'USER' : 'ADMIN';
-    const confirm = window.confirm(`確定要將 ${username} 的角色變更為 ${newRole} 嗎？`);
-    if (!confirm) return;
+
+    const result = await Swal.fire({
+      icon: 'question',
+      title: `確定要將 ${username} 的角色變更為 ${newRole} 嗎？`,
+      position: "center",
+      showCancelButton: true,
+      confirmButtonText: '確認',
+      cancelButtonText: '取消'
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       const res = await fetch(`http://localhost:8080/api/users/${id}/role`, {
@@ -36,14 +52,32 @@ export default function UserRoleManager() {
       });
 
       if (res.ok) {
-        alert('✅ 角色更新成功');
+        Swal.fire({
+          icon: "success",
+          title: "✅ 角色更新成功",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500
+        });
         fetchUsers();
       } else {
         const errMsg = await res.text();
-        alert(`❌ 更新失敗：${errMsg}`);
+        Swal.fire({
+          icon: "error",
+          title: `❌ 更新失敗：${errMsg}`,
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500
+        });
       }
     } catch (err) {
-      alert('⚠️ 無法送出更新');
+      Swal.fire({
+        icon: "warning",
+        title: "⚠️ 無法送出更新",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
       console.error(err);
     }
   };
@@ -52,8 +86,16 @@ export default function UserRoleManager() {
   const deleteUser = async (id, username) => {
     if (username === 'admin') return;
 
-    const confirm = window.confirm(`確定要刪除使用者 ${username} 嗎？`);
-    if (!confirm) return;
+    const result = await Swal.fire({
+      icon: 'warning',
+      title: `確定要刪除使用者 ${username} 嗎？`,
+      position: "center",
+      showCancelButton: true,
+      confirmButtonText: '刪除',
+      cancelButtonText: '取消'
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       const res = await fetch(`http://localhost:8080/api/users/${id}`, {
@@ -61,14 +103,32 @@ export default function UserRoleManager() {
       });
 
       if (res.ok) {
-        alert('✅ 使用者已刪除');
+        Swal.fire({
+          icon: "success",
+          title: "✅ 使用者已刪除",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500
+        });
         fetchUsers();
       } else {
         const errorText = await res.text();
-        alert(`❌ 刪除失敗：${errorText}`);
+        Swal.fire({
+          icon: "error",
+          title: `❌ 刪除失敗：${errorText}`,
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500
+        });
       }
     } catch (err) {
-      alert('⚠️ 系統錯誤');
+      Swal.fire({
+        icon: "warning",
+        title: "⚠️ 系統錯誤",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
       console.error(err);
     }
   };

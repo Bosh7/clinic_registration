@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import './RegistrationList.css';
 
 export default function RegistrationList() {
@@ -14,13 +15,25 @@ export default function RegistrationList() {
         if (Array.isArray(data.data)) {
           setRegistrations(data.data);
         } else {
-          alert('⚠️ 無法取得掛號資料：' + data.message);
+          Swal.fire({
+            icon: "warning",
+            title: "⚠️ 無法取得掛號資料：" + data.message,
+            position: "center",
+            showConfirmButton: false,
+            timer: 1500
+          });
         }
         setLoading(false);
       })
       .catch((err) => {
         console.error(err);
-        alert('⚠️ 取得掛號紀錄時發生錯誤');
+        Swal.fire({
+          icon: "warning",
+          title: "⚠️ 取得掛號紀錄時發生錯誤",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500
+        });
         setLoading(false);
       });
   }, []);

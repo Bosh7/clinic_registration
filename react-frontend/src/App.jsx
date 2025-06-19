@@ -10,6 +10,7 @@ import ScheduleHistoryPanel from './components/ScheduleHistoryPanel';
 import UserRoleManager from './components/UserRoleManager';
 import UserCreateForm from './components/UserCreateForm';
 import Marquee from './components/Marquee';
+import Swal from 'sweetalert2';
 import {
   BrowserRouter,
   Routes,
@@ -207,11 +208,23 @@ function AppContent() {
             <Login
               onLoginSuccess={(user) => {
                 if (user && user.username) {
-                  alert('登入成功！');
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "登入成功",
+                    showConfirmButton:false,
+                    timer: 1500
+                  });
                   setCurrentUser(user);
                   setStep('admin');
                 } else {
-                  alert('登入失敗，請確認帳號與密碼');
+                  Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "登入失敗，請確認帳號與密碼及認證碼",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
                 }
               }}
               onCancel={() => setStep('select')}

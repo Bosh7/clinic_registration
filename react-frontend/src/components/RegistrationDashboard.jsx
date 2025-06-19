@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import './RegistrationDashboard.css';
 
 export default function RegistrationDashboard() {
@@ -6,7 +7,6 @@ export default function RegistrationDashboard() {
   const [selectedDept, setSelectedDept] = useState('全部');
   const [selectedDate, setSelectedDate] = useState('');
   const [loading, setLoading] = useState(true);
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -23,13 +23,25 @@ export default function RegistrationDashboard() {
           );
           setRegistrations(sorted);
         } else {
-          alert('❌ 無法取得掛號紀錄');
+          Swal.fire({
+            icon: "error",
+            title: "❌ 無法取得掛號紀錄",
+            position: "center",
+            showConfirmButton: false,
+            timer: 1500
+          });
         }
         setLoading(false);
       })
       .catch(err => {
         console.error(err);
-        alert('⚠️ 發生錯誤');
+        Swal.fire({
+          icon: "warning",
+          title: "⚠️ 發生錯誤",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500
+        });
         setLoading(false);
       });
   };
@@ -49,7 +61,6 @@ export default function RegistrationDashboard() {
   const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
 
-  // 分頁按鈕省略功能
   function getPagination(current, total) {
     let pages = [];
     if (total <= 7) {
@@ -67,8 +78,16 @@ export default function RegistrationDashboard() {
   }
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm('確定要刪除此筆掛號紀錄嗎？');
-    if (!confirmDelete) return;
+    const result = await Swal.fire({
+      icon: "warning",
+      title: "確定要刪除此筆掛號紀錄嗎？",
+      position: "center",
+      showCancelButton: true,
+      confirmButtonText: "刪除",
+      cancelButtonText: "取消"
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       const res = await fetch(`http://localhost:8080/api/registrations/${id}`, {
@@ -76,13 +95,31 @@ export default function RegistrationDashboard() {
       });
 
       if (res.ok) {
-        alert('✅ 已刪除');
+        Swal.fire({
+          icon: "success",
+          title: "✅ 已刪除",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500
+        });
         loadData();
       } else {
-        alert('❌ 刪除失敗');
+        Swal.fire({
+          icon: "error",
+          title: "❌ 刪除失敗",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500
+        });
       }
     } catch (err) {
-      alert('⚠️ 發生錯誤');
+      Swal.fire({
+        icon: "warning",
+        title: "⚠️ 發生錯誤",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 
@@ -174,7 +211,7 @@ export default function RegistrationDashboard() {
               </tbody>
             </table>
 
-            {/* 分頁按鈕（動態省略） */}
+            {/* 分頁按鈕 */}
             <div className="rd-pagination">
               <button
                 className="rd-page-btn"

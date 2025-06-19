@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2'; // 加上這行
 import './AddScheduleForm.css';
 
 export default function AddScheduleForm() {
@@ -76,7 +77,13 @@ export default function AddScheduleForm() {
       s.dayOfWeek === form.dayOfWeek && s.timePeriod === form.timePeriod
     );
     if (isDuplicate) {
-      alert('❌ 此醫師該時段已有排班，請勿重複新增');
+      Swal.fire({
+        icon: "error",
+        title: "❌ 此醫師該時段已有排班，請勿重複新增",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
       return;
     }
 
@@ -95,12 +102,24 @@ export default function AddScheduleForm() {
     });
 
     if (res.ok) {
-      alert('✅ 新增排班成功');
+      Swal.fire({
+        icon: "success",
+        title: "✅ 新增排班成功",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
       setForm({ ...form, dayOfWeek: '', timePeriod: '' });
       fetchSchedule();
       fetchHistory();
     } else {
-      alert('❌ 新增失敗');
+      Swal.fire({
+        icon: "error",
+        title: "❌ 新增失敗",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 
@@ -115,11 +134,23 @@ export default function AddScheduleForm() {
     });
 
     if (res.ok) {
-      alert('✅ 刪除成功');
+      Swal.fire({
+        icon: "success",
+        title: "✅ 刪除成功",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
       fetchSchedule();
       fetchHistory();
     } else {
-      alert('❌ 刪除失敗');
+      Swal.fire({
+        icon: "error",
+        title: "❌ 刪除失敗",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 

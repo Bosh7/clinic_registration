@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 import './Login.css';
 
 export default function Login({ onLoginSuccess, onCancel }) {
@@ -33,13 +34,27 @@ export default function Login({ onLoginSuccess, onCancel }) {
       } else {
         setShowSuccess(false); // 失敗時確保成功提示消失
         // 統一顯示模糊訊息
-        alert('❌ 登入失敗，請確認帳號密碼或驗證碼');
+        Swal.fire({
+          icon: "error",
+          title: "❌ 登入失敗，請確認帳號密碼或驗證碼",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500
+        });
         refreshCaptcha();
         setCaptcha('');
       }
     } catch (error) {
       setShowSuccess(false); // 保險起見
-      alert('⚠️ 系統錯誤，請稍後再試');
+      
+      Swal.fire({
+        icon: "warning",
+        title: "⚠️ 系統錯誤，請稍後再試",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
+
       refreshCaptcha();
       setCaptcha('');
       console.error('Login error:', error);

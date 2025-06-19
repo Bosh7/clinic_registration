@@ -25,7 +25,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
     //  根據科別名稱查詢全部排班
     List<Schedule> findByDoctorDepartmentName(String departmentName);
     
-    //  根據科別與星期幾查詢（備用）
+    //  根據科別與星期幾查詢
     List<Schedule> findByDoctorDepartmentNameAndDayOfWeek(String departmentName, String dayOfWeek);
 
     //  新增：根據一群醫師 ID 與星期幾查詢（提供給日期+科別查詢用）

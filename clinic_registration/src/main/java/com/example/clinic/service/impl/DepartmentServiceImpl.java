@@ -31,8 +31,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     // 根據分類查詢（如「內科系」）
     @Override
     public List<DepartmentDTO> findByCategory(String category) {
-        return departmentRepository.findAll().stream()
-                .filter(dep -> dep.getCategory() != null && dep.getCategory().equals(category))
+        return departmentRepository.findByCategory(category).stream()
                 .map(departmentMapper::toDTO)
                 .collect(Collectors.toList());
     }

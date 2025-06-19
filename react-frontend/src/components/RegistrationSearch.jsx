@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 import './RegistrationSearch.css';
 
 export default function RegistrationSearch() {
@@ -11,12 +12,24 @@ export default function RegistrationSearch() {
   // 查詢掛號（含驗證碼驗證）
   const handleSearch = async () => {
     if (!idNumber) {
-      alert('請輸入識別號碼');
+      Swal.fire({
+        icon: "error",
+        title: "請輸入識別號碼",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500  
+      });
       return;
     }
 
     if (!captcha) {
-      alert('請輸入驗證碼');
+      Swal.fire({
+        icon: "error",
+        title: "請輸入驗證碼",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500  
+      });
       return;
     }
 
@@ -24,7 +37,13 @@ export default function RegistrationSearch() {
     if (idType === '身分證號') {
       const idRegex = /^[A-Z][0-9]{9}$/;
       if (!idRegex.test(idNumber)) {
-        alert('身分證格式錯誤，請輸入正確格式（例如：A123456789）');
+        Swal.fire({
+          icon: "error",
+          title: "身分證格式錯誤，請輸入正確格式（例如：A123456789）",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500  
+        });
         return;
       }
     }
@@ -32,7 +51,13 @@ export default function RegistrationSearch() {
     if (idType === '病歷號') {
       const caseNoRegex = /^[0-9]{10}$/;
       if (!caseNoRegex.test(idNumber)) {
-        alert('病歷號格式錯誤，請輸入 10 碼數字');
+        Swal.fire({
+          icon: "error",
+          title: "病歷號格式錯誤，請輸入 10 碼數字",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500  
+        });
         return;
       }
     }
@@ -44,7 +69,13 @@ export default function RegistrationSearch() {
       const data = await res.json();
 
       if (data.code !== 200) {
-        alert(data.message || '查詢失敗');
+        Swal.fire({
+          icon: "error",
+          title: data.message || '查詢失敗',
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500  
+        });
         setCaptcha('');
         setCaptchaImgSrc(`http://localhost:8080/api/captcha?${Date.now()}`);
         return;
@@ -56,14 +87,28 @@ export default function RegistrationSearch() {
       setCaptchaImgSrc(`http://localhost:8080/api/captcha?${Date.now()}`);
     } catch (err) {
       console.error('查詢錯誤', err);
-      alert('無法查詢，請稍後再試');
+      Swal.fire({
+        icon: "warning",
+        title: "無法查詢，請稍後再試",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500  
+      });
     }
   };
 
   // 刪除功能
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm('確定要刪除這筆掛號嗎？');
-    if (!confirmDelete) return;
+    const result = await Swal.fire({
+      icon: 'warning',
+      title: '確定要刪除這筆掛號嗎？',
+      position: 'center',
+      showCancelButton: true,
+      confirmButtonText: '刪除',
+      cancelButtonText: '取消'
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       const res = await fetch(`http://localhost:8080/api/registrations/${id}`, {
@@ -72,14 +117,31 @@ export default function RegistrationSearch() {
       });
 
       if (res.ok) {
-        alert('已刪除掛號');
-        //  直接移除 records 中該筆資料，不用重新查詢
+        Swal.fire({
+          icon: "success",
+          title: "已刪除掛號",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500  
+        });
         setRecords(prev => prev.filter(r => r.id !== id));
       } else {
-        alert('刪除失敗');
+        Swal.fire({
+          icon: "error",
+          title: "刪除失敗",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500  
+        });
       }
     } catch (error) {
-      alert('錯誤：' + error.message);
+      Swal.fire({
+        icon: "warning",
+        title: "錯誤：" + error.message,
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500  
+      });
     }
   };
 

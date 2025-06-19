@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import './ScheduleDashboard.css';
 
 export default function ScheduleDashboard({ user }) {
@@ -20,7 +21,13 @@ export default function ScheduleDashboard({ user }) {
 
   const fetchByDepartment = async () => {
     if (!department) {
-      alert('請輸入科別名稱');
+      Swal.fire({
+        icon: "error",
+        title: "請輸入科別名稱",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500  
+      });
       return;
     }
     const res = await fetch(`http://localhost:8080/api/schedules/department?name=${department}`);
@@ -28,7 +35,6 @@ export default function ScheduleDashboard({ user }) {
     setSchedules(data);
   };
 
-  
   const handleAdd = async () => {
     const res = await fetch('http://localhost:8080/api/schedules', {
       method: 'POST',
@@ -38,15 +44,26 @@ export default function ScheduleDashboard({ user }) {
     });
 
     if (res.ok) {
-      alert('新增成功');
+      Swal.fire({
+        icon: "success",
+        title: "新增成功",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500  
+      });
       fetchAllSchedules();
     } else {
       const msg = await res.text(); 
-      alert('❌ 新增失敗：' + msg);
+      Swal.fire({
+        icon: "error",
+        title: "❌ 新增失敗：" + msg,
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500  
+      });
     }
   };
 
-  
   const handleDelete = async (id) => {
     const res = await fetch(`http://localhost:8080/api/schedules/${id}`, {
       method: 'DELETE',
@@ -54,10 +71,22 @@ export default function ScheduleDashboard({ user }) {
     });
 
     if (res.ok) {
-      alert('刪除成功');
+      Swal.fire({
+        icon: "success",
+        title: "刪除成功",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500  
+      });
       fetchAllSchedules();
     } else {
-      alert('刪除失敗');
+      Swal.fire({
+        icon: "error",
+        title: "刪除失敗",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500  
+      });
     }
   };
 
