@@ -13,3 +13,7 @@
 # 忽略 OS 系統檔
 .DS_Store
 Thumbs.db
+
+# 作業系統垃圾檔案
+.DS_Store
+Thumbs.db
