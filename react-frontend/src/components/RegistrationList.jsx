@@ -9,7 +9,7 @@ export default function RegistrationList() {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/registrations')
+    fetch('/api/registrations')
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data.data)) {

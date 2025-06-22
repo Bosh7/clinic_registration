@@ -14,7 +14,7 @@ export default function RegistrationDashboard() {
 
   const loadData = () => {
     setLoading(true);
-    fetch('http://localhost:8080/api/registrations')
+    fetch('/api/registrations')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data.data)) {
@@ -90,7 +90,7 @@ export default function RegistrationDashboard() {
     if (!result.isConfirmed) return;
 
     try {
-      const res = await fetch(`http://localhost:8080/api/registrations/${id}`, {
+      const res = await fetch(`/api/registrations/${id}`, {
         method: 'DELETE'
       });
 

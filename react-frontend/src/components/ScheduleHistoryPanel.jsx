@@ -5,7 +5,7 @@ export default function ScheduleHistoryPanel() {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/schedule-history')
+    fetch('/api/schedule-history')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {

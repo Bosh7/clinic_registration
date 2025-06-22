@@ -25,7 +25,7 @@ function RegisterForm({ selectedDepartment, onBack }) {
 
   useEffect(() => {
     if (selectedDepartment && selectedDate) {
-      fetch(`http://localhost:8080/api/schedules/search-by-department-and-date?departmentName=${selectedDepartment}&date=${selectedDate}`)
+      fetch(`/api/schedules/search-by-department-and-date?departmentName=${selectedDepartment}&date=${selectedDate}`)
         .then((res) => res.json())
         .then((data) => {
           const formatted = {};
@@ -43,7 +43,7 @@ function RegisterForm({ selectedDepartment, onBack }) {
       getDoctorIdByName(selectedSlot.doctor)
         .then((doctorId) => {
           return fetch(
-            `http://localhost:8080/api/registrations/count?doctorId=${doctorId}&date=${selectedDate}&timePeriod=${selectedSlot.period}`
+            `/api/registrations/count?doctorId=${doctorId}&date=${selectedDate}&timePeriod=${selectedSlot.period}`
           );
         })
         .then(res => res.json())
@@ -62,7 +62,7 @@ function RegisterForm({ selectedDepartment, onBack }) {
   }, [selectedSlot, selectedDate]);
 
   const getDoctorIdByName = async (doctorName) => {
-    const res = await fetch(`http://localhost:8080/api/doctors/find-id?name=${encodeURIComponent(doctorName)}`);
+    const res = await fetch(`/api/doctors/find-id?name=${encodeURIComponent(doctorName)}`);
     if (!res.ok) throw new Error('找不到醫師 ID');
     const obj = await res.json();
     return obj.id || (obj.data && obj.data.id) || obj;
@@ -116,7 +116,7 @@ function RegisterForm({ selectedDepartment, onBack }) {
 
     try {
       const doctorId = await getDoctorIdByName(selectedSlot.doctor);
-      const response = await fetch('http://localhost:8080/api/registrations', {
+      const response = await fetch('/api/registrations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

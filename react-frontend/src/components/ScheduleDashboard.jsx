@@ -14,7 +14,7 @@ export default function ScheduleDashboard({ user }) {
   });
 
   const fetchAllSchedules = async () => {
-    const res = await fetch('http://localhost:8080/api/schedules');
+    const res = await fetch('/api/schedules');
     const data = await res.json();
     setSchedules(data);
   };
@@ -30,13 +30,13 @@ export default function ScheduleDashboard({ user }) {
       });
       return;
     }
-    const res = await fetch(`http://localhost:8080/api/schedules/department?name=${department}`);
+    const res = await fetch(`/api/schedules/department?name=${department}`);
     const data = await res.json();
     setSchedules(data);
   };
 
   const handleAdd = async () => {
-    const res = await fetch('http://localhost:8080/api/schedules', {
+    const res = await fetch('/api/schedules', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include', 
@@ -65,7 +65,7 @@ export default function ScheduleDashboard({ user }) {
   };
 
   const handleDelete = async (id) => {
-    const res = await fetch(`http://localhost:8080/api/schedules/${id}`, {
+    const res = await fetch(`/api/schedules/${id}`, {
       method: 'DELETE',
       credentials: 'include' 
     });

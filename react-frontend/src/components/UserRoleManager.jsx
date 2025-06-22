@@ -8,7 +8,7 @@ export default function UserRoleManager() {
   // 取得所有使用者
   const fetchUsers = async () => {
     try {
-      const res = await fetch('http://localhost:8080/api/users');
+      const res = await fetch('/api/users');
       const data = await res.json();
       setUsers(data);
     } catch (err) {
@@ -45,7 +45,7 @@ export default function UserRoleManager() {
     if (!result.isConfirmed) return;
 
     try {
-      const res = await fetch(`http://localhost:8080/api/users/${id}/role`, {
+      const res = await fetch(`/api/users/${id}/role`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ role: newRole })
@@ -98,7 +98,7 @@ export default function UserRoleManager() {
     if (!result.isConfirmed) return;
 
     try {
-      const res = await fetch(`http://localhost:8080/api/users/${id}`, {
+      const res = await fetch(`/api/users/${id}`, {
         method: 'DELETE'
       });
 

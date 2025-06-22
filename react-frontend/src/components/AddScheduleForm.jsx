@@ -17,7 +17,7 @@ export default function AddScheduleForm() {
   });
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/departments')
+    fetch('/api/departments')
       .then(res => res.json())
       .then(data => setDepartments(Array.isArray(data) ? data : []))
       .catch(err => console.error('❌ 無法載入科別:', err));
@@ -25,7 +25,7 @@ export default function AddScheduleForm() {
 
   useEffect(() => {
     if (form.departmentId) {
-      fetch(`http://localhost:8080/api/doctors/department/${form.departmentId}`)
+      fetch(`/api/doctors/department/${form.departmentId}`)
         .then(res => res.json())
         .then(data => setDoctors(Array.isArray(data) ? data : []))
         .catch(err => console.error('❌ 無法載入醫師:', err));
@@ -45,13 +45,13 @@ export default function AddScheduleForm() {
   }, [form.doctorId]);
 
   const fetchSchedule = () => {
-    fetch(`http://localhost:8080/api/schedules/doctor?name=${getDoctorNameById(form.doctorId)}`)
+    fetch(`/api/schedules/doctor?name=${getDoctorNameById(form.doctorId)}`)
       .then(res => res.json())
       .then(data => setCurrentSchedules(Array.isArray(data) ? data : []));
   };
 
   const fetchHistory = () => {
-    fetch('http://localhost:8080/api/schedule-history')
+    fetch('/api/schedule-history')
       .then(res => res.json())
       .then(data => {
         const sorted = [...data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
@@ -94,7 +94,7 @@ export default function AddScheduleForm() {
       available: form.available === 'true'
     };
 
-    const res = await fetch('http://localhost:8080/api/schedules', {
+    const res = await fetch('/api/schedules', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -128,7 +128,7 @@ export default function AddScheduleForm() {
     const confirmed = window.confirm('是否確認刪除這筆排班？');
     if (!confirmed) return;
 
-    const res = await fetch(`http://localhost:8080/api/schedules/${id}`, {
+    const res = await fetch(`/api/schedules/${id}`, {
       method: 'DELETE',
       credentials: 'include'
     });
@@ -160,7 +160,7 @@ export default function AddScheduleForm() {
       action,
       content
     };
-    await fetch('http://localhost:8080/api/schedule-history', {
+    await fetch('/api/schedule-history', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
