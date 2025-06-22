@@ -6,7 +6,7 @@ export default function RegistrationSearch() {
   const [idType, setIdType] = useState('身分證號');
   const [idNumber, setIdNumber] = useState('');
   const [captcha, setCaptcha] = useState('');
-  const [captchaImgSrc, setCaptchaImgSrc] = useState('http://localhost:8080/api/captcha');
+  const [captchaImgSrc, setCaptchaImgSrc] = useState('/api/captcha');
   const [records, setRecords] = useState([]);
 
   // 查詢掛號（含驗證碼驗證）
@@ -62,7 +62,7 @@ export default function RegistrationSearch() {
       }
     }
 
-    const url = `http://localhost:8080/api/registrations/search?idType=${idType}&idNumber=${idNumber}&captcha=${captcha}`;
+    const url = `/api/registrations/search?idType=${idType}&idNumber=${idNumber}&captcha=${captcha}`;
 
     try {
       const res = await fetch(url, { credentials: 'include' });
@@ -77,14 +77,14 @@ export default function RegistrationSearch() {
           timer: 1500  
         });
         setCaptcha('');
-        setCaptchaImgSrc(`http://localhost:8080/api/captcha?${Date.now()}`);
+        setCaptchaImgSrc(`/api/captcha?${Date.now()}`);
         return;
       }
 
       setRecords(data.data || []);
       setCaptcha('');
       setIdNumber('');
-      setCaptchaImgSrc(`http://localhost:8080/api/captcha?${Date.now()}`);
+      setCaptchaImgSrc(`/api/captcha?${Date.now()}`);
     } catch (err) {
       console.error('查詢錯誤', err);
       Swal.fire({
@@ -111,7 +111,7 @@ export default function RegistrationSearch() {
     if (!result.isConfirmed) return;
 
     try {
-      const res = await fetch(`http://localhost:8080/api/registrations/${id}`, {
+      const res = await fetch(`/api/registrations/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -189,7 +189,7 @@ export default function RegistrationSearch() {
           <img
             src={captchaImgSrc}
             alt="驗證碼"
-            onClick={() => setCaptchaImgSrc(`http://localhost:8080/api/captcha?${Date.now()}`)}
+            onClick={() => setCaptchaImgSrc(`/api/captcha?${Date.now()}`)}
             className="regsearch-captcha-img"
             title="點我更換驗證碼"
           />

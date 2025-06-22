@@ -7,19 +7,19 @@ export default function Login({ onLoginSuccess, onCancel }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [captcha, setCaptcha] = useState('');
-  const [captchaImg, setCaptchaImg] = useState('http://localhost:8080/api/captcha');
+  const [captchaImg, setCaptchaImg] = useState('/api/captcha');
   const [showSuccess, setShowSuccess] = useState(false);
 
   // 刷新驗證碼圖片（避免快取）
   const refreshCaptcha = () => {
-    setCaptchaImg(`http://localhost:8080/api/captcha?${Date.now()}`);
+    setCaptchaImg(`/api/captcha?${Date.now()}`);
   };
 
   // 處理表單送出
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password, captcha }),
