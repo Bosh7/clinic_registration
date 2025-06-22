@@ -62,7 +62,7 @@ function AppContent() {
   // 1. 登出流程
   const handleLogout = useCallback(async () => {
     try {
-      await fetch('http://localhost:8080/api/auth/logout', {
+      await fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include',
       });
@@ -86,7 +86,7 @@ function AppContent() {
 
     const checkSession = async () => {
       try {
-        const res = await fetch('http://localhost:8080/api/auth/me', {
+        const res = await fetch('/api/auth/me', {
           credentials: 'include'
         });
         if (res.ok) {
