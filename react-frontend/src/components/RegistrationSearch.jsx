@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import './RegistrationSearch.css';
 
@@ -6,8 +6,24 @@ export default function RegistrationSearch() {
   const [idType, setIdType] = useState('身分證號');
   const [idNumber, setIdNumber] = useState('');
   const [captcha, setCaptcha] = useState('');
-  const [captchaImgSrc, setCaptchaImgSrc] = useState('/api/captcha');
+  const [captchaText, setCaptchaText] = useState('');
   const [records, setRecords] = useState([]);
+
+  // 取得驗證碼文字
+  const refreshCaptcha = async () => {
+    try {
+      const res = await fetch(`/api/captcha`, { credentials: 'include' });
+      const text = await res.text();
+      setCaptchaText(text);
+    } catch (error) {
+      console.error('取得驗證碼失敗', error);
+      setCaptchaText('----');
+    }
+  };
+
+  useEffect(() => {
+    refreshCaptcha();
+  }, []);
 
   // 查詢掛號（含驗證碼驗證）
   const handleSearch = async () => {
@@ -77,14 +93,14 @@ export default function RegistrationSearch() {
           timer: 1500  
         });
         setCaptcha('');
-        setCaptchaImgSrc(`/api/captcha?${Date.now()}`);
+        refreshCaptcha();
         return;
       }
 
       setRecords(data.data || []);
       setCaptcha('');
       setIdNumber('');
-      setCaptchaImgSrc(`/api/captcha?${Date.now()}`);
+      refreshCaptcha();
     } catch (err) {
       console.error('查詢錯誤', err);
       Swal.fire({
@@ -186,13 +202,26 @@ export default function RegistrationSearch() {
             placeholder="驗證碼"
             className="regsearch-captcha-input"
           />
-          <img
-            src={captchaImgSrc}
-            alt="驗證碼"
-            onClick={() => setCaptchaImgSrc(`/api/captcha?${Date.now()}`)}
+          <span
+            onClick={refreshCaptcha}
             className="regsearch-captcha-img"
             title="點我更換驗證碼"
-          />
+            style={{
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0 10px',
+              background: '#fff',
+              border: '1px solid #ccc',
+              fontWeight: 'bold',
+              fontSize: '18px',
+              height: '38px',
+              letterSpacing: '2px'
+            }}
+          >
+            {captchaText}
+          </span>
         </div>
       </div>
 

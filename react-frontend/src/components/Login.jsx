@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import './Login.css';
 
@@ -7,13 +7,25 @@ export default function Login({ onLoginSuccess, onCancel }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [captcha, setCaptcha] = useState('');
-  const [captchaImg, setCaptchaImg] = useState('/api/captcha');
+  const [captchaText, setCaptchaText] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
 
   // 刷新驗證碼圖片（避免快取）
-  const refreshCaptcha = () => {
-    setCaptchaImg(`/api/captcha?${Date.now()}`);
+  const refreshCaptcha = async () => {
+    try {
+      const res = await fetch(`/api/captcha`, { credentials: 'include' });
+      const text = await res.text();
+      setCaptchaText(text);
+    } catch (error) {
+      console.error('取得驗證碼失敗', error);
+      setCaptchaText('----');
+    }
   };
+
+  // 初次載入時取得驗證碼
+  useEffect(() => {
+    refreshCaptcha();
+  }, []);
 
   // 處理表單送出
   const handleSubmit = async (e) => {
@@ -99,13 +111,25 @@ export default function Login({ onLoginSuccess, onCancel }) {
               autoComplete="off"
               required
             />
-            <img
-              src={captchaImg}
-              alt="驗證碼"
+            <span
               onClick={refreshCaptcha}
               title="點擊更換驗證碼"
-              style={{ cursor: 'pointer', border: '1px solid #ccc', height: '38px', background: '#fff' }}
-            />
+              style={{ 
+                cursor: 'pointer',
+                border: '1px solid #ccc',
+                height: '38px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '0 10px',
+                background: '#fff',
+                fontWeight: 'bold',
+                fontSize: '18px',
+                letterSpacing: '2px'
+              }}
+            >
+              {captchaText}
+            </span>
           </div>
 
           <div className="login-btn-group">
