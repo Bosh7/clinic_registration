@@ -32,7 +32,16 @@ public class SecurityConfig {
                         "/manifest.json",
                         "/robots.txt",
                         "/css/**",
-                        "/js/**")
+                        "/js/**",
+                        "/register",
+                        "/search",
+                        "/login",
+                        "/admin",
+                        "/registrationList",
+                        "/addSchedule",
+                        "/scheduleHistory",
+                        "/manageUsers",
+                        "/addUser")
                 
                 .permitAll()
                 .anyRequest().authenticated()

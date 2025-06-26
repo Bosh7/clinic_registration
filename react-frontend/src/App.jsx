@@ -275,7 +275,11 @@ function AppContent() {
         )}
       </main>
       <footer className="footer-bar">
-        © 2025 健康醫療網掛號系統
+        © 2025 診易通網掛號系統
+        <br />
+        <small style={{ fontSize: '12px', color: '#f0f0f0' }}>
+          本網站僅供個人學習與面試展示用途，所有資料均為系統亂數產生，不代表任何真實醫療機構或病患資訊。
+        </small>
       </footer>
       {step !== 'select' && (
         <button

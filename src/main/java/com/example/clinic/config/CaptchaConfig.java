@@ -19,6 +19,7 @@ public class CaptchaConfig {
         props.setProperty("kaptcha.image.width", "120");
         props.setProperty("kaptcha.textproducer.font.size", "36");
         props.setProperty("kaptcha.noise.impl", "com.google.code.kaptcha.impl.NoNoise");
+        props.setProperty("kaptcha.textproducer.font.names", "Arial");
 
         Config config = new Config(props);
         return config.getProducerImpl();
